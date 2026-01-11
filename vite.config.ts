@@ -4,7 +4,7 @@ import pkg from "./package.json";
 import { wrapperEnv } from "./build";
 import { getPluginsList } from "./build/plugins";
 import { include, exclude } from "./build/optimize";
-import { UserConfigExport, ConfigEnv, loadEnv } from "vite";
+import { UserConfigExport, ConfigEnv, loadEnv, PluginOption } from "vite";
 
 /** 当前执行node命令时文件夹的地址（工作目录） */
 const root: string = process.cwd();
@@ -51,7 +51,11 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         }
       }
     },
-    plugins: getPluginsList(command, VITE_CDN, VITE_COMPRESSION),
+    plugins: getPluginsList(
+      command,
+      VITE_CDN,
+      VITE_COMPRESSION
+    ) as PluginOption[],
     // https://cn.vitejs.dev/config/dep-optimization-options.html#dep-optimization-options
     optimizeDeps: {
       include,
