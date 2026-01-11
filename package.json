@@ -136,7 +136,7 @@
       "stable": "*"
     }
   },
-  "repository": "git@github.com:valarchie/agileboot-front-end-pure.git",
-  "author": "valarchie",
+  "repository": "git@github.com:bruceblink/AgileBoot-Front-End.git",
+  "author": "bruceblink",
   "license": "MIT"
 }
