@@ -1,19 +1,15 @@
 <p align="center">
       <img src="https://img.shields.io/badge/Release-V1.8.0-green.svg" alt="Downloads">
-      <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" alt="Build Status">
+      <img src="https://img.shields.io/badge/JDK-17+-green.svg" alt="Build Status">
   <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Build Status">
-   <img src="https://img.shields.io/badge/Spring%20Boot-2.7.1-blue.svg" alt="Downloads">
-   <a target="_blank" href="https://bladex.vip">
-   <img src="https://img.shields.io/badge/Author-valarchie-ff69b4.svg" alt="Downloads">
+   <img src="https://img.shields.io/badge/Spring%20Boot-2.7-blue.svg" alt="Downloads">
+   <a target="_blank" href="https://likanug.top">
+   <img src="https://img.shields.io/badge/Author-likanug-ff69b4.svg" alt="Downloads">
  </a>
- <a target="_blank" href="https://bladex.vip">
+ <a target="_blank" href="https://likanug.top">
    <img src="https://img.shields.io/badge/Copyright%20-@Agileboot-%23ff3f59.svg" alt="Downloads">
  </a>
- </p>  
-<p align="center">
-
-<img alt="logo" height="200" src="https://oscimg.oschina.net/oscnet/up-eda2a402cc061f1f5f40d9ac4c084f4c98c.png">
-</p>
+ </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">AgileBoot v2.0.0</h1>
 
 <h4 align="center">基于SpringBoot+Vue3前后端分离的Java快速开发框架</h4>
@@ -22,30 +18,9 @@
 
 ## ⚡ 平台简介 ⚡
 
-- 本仓库是 Agilboot 快速开发脚手架的配套前端项目。前端是基于优秀的开源项目[Pure-Admin](https://github.com/pure-admin/vue-pure-admin)开发而成。在此感谢 Pure-Admin 作者。
+- 本仓库是 Agilboot 快速开发脚手架的配套前端项目。前端是基于优秀的开源项目[AgileBoot-Front-End](https://github.com/valarchie/AgileBoot-Front-End)开发而成。在此感谢 AgileBoot-Front-End 的[作者](https://github.com/valarchie/AgileBoot-Front-End)。
 - 本仓库前端技术栈 [Vue3](https://v3.cn.vuejs.org) + [Element Plus](https://element-plus.org/zh-CN) + [Vite](https://cn.vitejs.dev) 版本。
-- 配套后端代码仓库地址[AgileBoot-Back-End](https://github.com/valarchie/AgileBoot-Back-End) 版本。
-
-- 规范请参照该文档 [前端规范](https://gitee.com/MinJieLiu/web-standard#/MinJieLiu/web-standard)
-
-### 前端配套资料
-
-#### 配套视频
-
-- [点我查看教程](https://www.bilibili.com/video/BV1kg411v7QT)
-- [点我查看 UI 设计](https://www.bilibili.com/video/BV17g411T7rq)
-
-#### 配套保姆级文档
-
-- [查看文档](https://yiming_chang.gitee.io/pure-admin-doc)
-
-#### Pure-Admin 框架预览
-
-- [查看预览](https://pure-admin-thin.netlify.app/#/login)
-
-#### Pure-Admin 维护者
-
-- [xiaoxian521](https://github.com/xiaoxian521)
+- 配套后端代码仓库地址[AgileBoot-Back-End](https://github.com/bruceblink/AgileBoot-Back-End) 版本。
 
 ## ✨ 使用 ✨
 
@@ -54,7 +29,7 @@
 Node.js 版本要求：16.0+
 pnpm 版本要求：6.0+
 
-优先选择 node=16, pnpm=7.30.5的环境.
+优先选择 node=16, pnpm=7.30.5 的环境.
 
 如果您还没安装 pnpm，请执行下面命令进行安装（mac 用户遇到安装报错请在命令前加上 sudo） 如果是 windows 用户，使用 power shell 管理员权限执行
 
@@ -106,19 +81,7 @@ npm config set registry https://registry.npmmirror.com
 
 演示地址：
 
-- <www.agileboot.vip>
-- <www.agileboot.cc>
-  > 账号密码：admin/admin123
-
-[项目文档](https://juejin.cn/column/7159946528827080734)
-
-## 🎬 AgileBoot 全栈交流群 🎬
-
-QQ 群： [![加入QQ群](https://img.shields.io/badge/1398880-blue.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=TR5guoXS0HssErVWefmdFRirJvfpEvp1&jump_from=webapi&authKey=VkWMmVhp/pNdWuRD8sqgM+Sv2+Vy2qCJQSeLmeXlLtfER2RJBi6zL56PdcRlCmTs) 点击按钮入群。
-
-如果觉得该项目对您有帮助，可以小额捐赠支持本项目演示网站服务器等费用~
-
-<img alt="logo" height="200" src="https://oscimg.oschina.net/oscnet/up-28b63fdd7b3ce003bd30c25883f2276212b.png">
+- <https://agileboot-front-end.pages.dev>
 
 ### 用法
 
@@ -142,4 +105,12 @@ pnpm remove 包名
 
 ### 许可证
 
-原则上不收取任何费用及版权，可商用，不过如需二次开源（比如用此平台二次开发并开源，要求前端代码必须开源免费）请联系作者获取许可！（免费，走个记录而已）
+原则上不收取任何费用及版权，可商用，不过如需二次开源（比如用此平台二次开发并开源，要求前端代码必须开源免费）请联系作者获取许可！
+
+## Contributors
+
+<a href="https://github.com/bruceblink/AgileBoot-Front-End/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=bruceblink/AgileBoot-Front-End"  alt="bruceblink/AgileBoot-Front-End"/>
+</a>
+
+[![Sponsor](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://github.com/sponsors/bruceblink) [![Buy Me Coffee](https://img.shields.io/badge/Buy%20Me%20Coffee-FF5A5F?style=for-the-badge&logo=coffee&logoColor=FFFFFF)](https://buymeacoffee.com/bruceblink)
