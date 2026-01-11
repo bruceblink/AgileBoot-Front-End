@@ -41,6 +41,7 @@ import Lock from "@iconify-icons/ri/lock-fill";
 import User from "@iconify-icons/ri/user-3-fill";
 import * as CommonAPI from "@/api/common/login";
 import { useUserStoreHook } from "@/store/modules/user";
+import dayjs from "dayjs";
 
 defineOptions({
   name: "Login"
@@ -324,14 +325,9 @@ onBeforeUnmount(() => {
     <!--  底部  -->
     <div class="flex items-center justify-center h-full">
       <div class="flex flex-col items-center justify-center mb-3">
-        <span>Copyright © 2018-2023 Agileboot All Rights Reserved. </span>
-        <el-link
-          href="https://beian.miit.gov.cn"
-          rel="external nofollow"
-          target="_blank"
-          type="primary"
-          >闽ICP备2022018106号-2
-        </el-link>
+        <span
+          >Copyright © {{ dayjs().year() }} Agileboot All Rights Reserved.
+        </span>
       </div>
     </div>
   </div>
