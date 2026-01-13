@@ -12,6 +12,8 @@ import AddFill from "@iconify-icons/ri/add-circle-line";
 import { getRoleInfoApi, RoleDTO } from "@/api/system/role";
 import RoleFormModal from "@/views/system/role/role-form-modal.vue";
 import { ElMessage } from "element-plus";
+import PureTable from "@pureadmin/table";
+import { handleCurrentChange } from "element-plus/es/components/tree/src/model/util";
 
 defineOptions({
   name: "SystemRole"
@@ -127,7 +129,7 @@ async function openDialog(type: "add" | "update", row?: RoleDTO) {
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
-          :paginationSmall="size === 'small' ? true : false"
+          :paginationSmall="size === 'small'"
           :header-cell-style="{
             background: 'var(--el-table-row-hover-bg-color)',
             color: 'var(--el-text-color-primary)'

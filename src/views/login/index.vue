@@ -156,7 +156,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="select-none">
-    <img :src="bg" class="wave" />
+    <img :src="bg" class="wave" alt="" />
     <div class="absolute flex-c right-5 top-3">
       <!-- 主题 -->
       <el-switch
