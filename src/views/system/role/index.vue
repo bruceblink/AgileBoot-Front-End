@@ -35,7 +35,6 @@ const opType = ref<"add" | "update">("add");
 const modalVisible = ref(false);
 const opRow = ref<RoleDTO>();
 async function openDialog(type: "add" | "update", row?: RoleDTO) {
-  debugger;
   try {
     await getMenuTree();
     if (row) {
