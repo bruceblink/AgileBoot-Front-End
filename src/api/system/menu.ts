@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 import { Tree } from "@/utils/tree";
 
 export interface MenuQuery {
-  isButton: boolean;
+  isButton?: boolean | null;
 }
 
 /**
@@ -10,7 +10,7 @@ export interface MenuQuery {
  */
 export interface MenuDTO extends Tree {
   createTime?: Date;
-  isButton?: number;
+  isButton?: boolean;
   id?: number;
   menuName?: string;
   parentId?: number;

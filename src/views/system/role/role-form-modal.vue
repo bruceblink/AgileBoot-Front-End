@@ -213,7 +213,23 @@ async function handleConfirm() {
           :default-checked-keys="formData.menuIds"
           @check-change="handleCheckChange"
           style="width: 100%"
-        />
+        >
+          <template #default="{ data }">
+            <div class="menu-tree-node">
+              <span>{{ data.menuName }}</span>
+              <el-tag
+                class="menu-tree-node__tag"
+                :type="data.isButton ? 'warning' : 'info'"
+                size="small"
+              >
+                {{ data.isButton ? "按钮" : "菜单" }}
+              </el-tag>
+              <span v-if="data.permission" class="menu-tree-node__permission">
+                {{ data.permission }}
+              </span>
+            </div>
+          </template>
+        </el-tree>
       </el-form-item>
       <el-form-item prop="remark" label="备注" style="margin-bottom: 0">
         <el-input type="textarea" v-model="formData.remark" />
@@ -221,3 +237,23 @@ async function handleConfirm() {
     </el-form>
   </v-dialog>
 </template>
+
+<style scoped lang="scss">
+.menu-tree-node {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.menu-tree-node__tag {
+  flex: none;
+}
+
+.menu-tree-node__permission {
+  overflow: hidden;
+  color: var(--el-text-color-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
