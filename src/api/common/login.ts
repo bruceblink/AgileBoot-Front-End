@@ -56,7 +56,7 @@ export type RefreshTokenDTO = {
 export type CurrentLoginUserDTO = {
   userInfo: CurrentUserInfoDTO;
   roleKey: string;
-  permissions: Set<string>;
+  permissions: string[];
 };
 
 /**
@@ -139,7 +139,10 @@ export const logoutRefreshToken = (data: RefreshTokenDTO) => {
 
 /** 获取当前登录用户接口 */
 export const getLoginUserInfo = () => {
-  return http.request<ResponseData<TokenDTO>>("get", "/getLoginUserInfo");
+  return http.request<ResponseData<CurrentLoginUserDTO>>(
+    "get",
+    "/getLoginUserInfo"
+  );
 };
 
 export interface RouteMeta {

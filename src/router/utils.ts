@@ -374,10 +374,6 @@ function getCurrentUserPermissions(): Array<string> {
     return permissions.filter(Boolean);
   }
 
-  if (permissions instanceof Set) {
-    return Array.from(permissions).filter(Boolean);
-  }
-
   return [];
 }
 
