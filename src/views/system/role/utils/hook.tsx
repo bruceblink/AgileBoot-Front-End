@@ -15,6 +15,7 @@ import { onMounted, reactive, ref, toRaw } from "vue";
 import { toTree } from "@/utils/tree";
 import { CommonUtils } from "@/utils/common";
 import { useSystemDict } from "@/views/system/utils/dict";
+import { hasAuth } from "@/router/utils";
 
 type SwitchState = {
   loading?: boolean;
@@ -26,6 +27,19 @@ const statusMap = useSystemDict("common.status").map;
 
 function getStatusLabel(status: unknown, fallback = "") {
   return statusMap.value[String(status)]?.label || fallback;
+}
+
+function renderStatusTag(status: unknown, size: string) {
+  const statusInfo = statusMap.value[String(status)] ?? {
+    cssTag: "info",
+    label: String(status ?? "-")
+  };
+
+  return (
+    <el-tag size={size} type={statusInfo.cssTag} effect="plain">
+      {statusInfo.label}
+    </el-tag>
+  );
 }
 
 export function useRole() {
@@ -63,20 +77,23 @@ export function useRole() {
     {
       label: "状态",
       minWidth: 130,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text={getStatusLabel(1, "1")}
-          inactive-text={getStatusLabel(0, "0")}
-          inline-prompt
-          style={switchStyle.value}
-          onChange={() => onChange(scope.row as RoleDTO, scope.index)}
-        />
-      )
+      cellRenderer: scope =>
+        hasAuth("system:role:edit") ? (
+          <el-switch
+            size={scope.props.size === "small" ? "small" : "default"}
+            loading={switchLoadMap.value[scope.index]?.loading}
+            v-model={scope.row.status}
+            active-value={1}
+            inactive-value={0}
+            active-text={getStatusLabel(1, "1")}
+            inactive-text={getStatusLabel(0, "0")}
+            inline-prompt
+            style={switchStyle.value}
+            onChange={() => onChange(scope.row as RoleDTO, scope.index)}
+          />
+        ) : (
+          renderStatusTag(scope.row.status, scope.props.size)
+        )
     },
     {
       label: "备注",
