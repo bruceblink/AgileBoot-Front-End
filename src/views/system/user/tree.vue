@@ -54,9 +54,7 @@ const filterNode = (value: string, data: Tree) => {
 };
 
 function nodeClick(value) {
-  console.log(value);
   const nodeId = value.$treeNodeId;
-  console.log(nodeId);
   highlightMap.value[nodeId] = highlightMap.value[nodeId]?.highlight
     ? Object.assign({ id: nodeId }, highlightMap.value[nodeId], {
         highlight: false

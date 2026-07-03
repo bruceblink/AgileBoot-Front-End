@@ -196,8 +196,6 @@ export function useHook() {
       meta = (row as MenuDetailDTO).meta;
     }
 
-    console.log(row);
-
     // TODO 为什么声明一个formInline变量,把变量填充进去，  再给props.formInline 结果就不生效
     addDialog({
       title: `${title}菜单`,
@@ -227,8 +225,6 @@ export function useHook() {
 
         // 将菜单的数据转换为标准的路由数据
         transferToStandardRouterData(curData, optionTree);
-
-        console.log(curData);
 
         FormRef.validate(valid => {
           if (valid) {

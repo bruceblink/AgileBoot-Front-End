@@ -107,7 +107,6 @@ const visible = computed<boolean>({
 const fullScreenState = ref(!!props.initFullScreen);
 const fullScreen = computed<boolean>({
   get: () => {
-    console.log("fullScreen getter", props.fullScreen, fullScreenState.value);
     // 非受控模式，状态完全由组件内部控制
     if (props.fullScreen === undefined) {
       return fullScreenState.value;
@@ -117,7 +116,6 @@ const fullScreen = computed<boolean>({
   },
   set: v => {
     fullScreenState.value = v;
-    console.log("fullScreen setter", v, props.fullScreen);
     // 受控模式，将状态更新到父组件
     if (props.fullScreen !== undefined) {
       emits("update:fullScreen", v);
