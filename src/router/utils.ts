@@ -348,7 +348,7 @@ function getHistoryMode(routerHistory: string): RouterHistory {
   }
 }
 
-/** 获取当前登录用户按钮级别的权限 */
+/** 获取当前登录用户 currentUser.permissions 中的按钮级权限 */
 function getAuths(): Array<string> {
   return getCurrentUserPermissions();
 }
@@ -356,13 +356,12 @@ function getAuths(): Array<string> {
 /** 是否有按钮级别的权限 */
 function hasAuth(value: string | Array<string>): boolean {
   if (!value) return false;
-  /** 统一使用登录态中的按钮权限 */
-  const auths = getAuths();
-  if (!auths.length) return false;
-  if (auths.includes(ALL_PERMISSIONS)) return true;
+  const permissions = getAuths();
+  if (!permissions.length) return false;
+  if (permissions.includes(ALL_PERMISSIONS)) return true;
   const isAuths = isString(value)
-    ? auths.includes(value)
-    : isIncludeAllChildren(value, auths);
+    ? permissions.includes(value)
+    : isIncludeAllChildren(value, permissions);
   return isAuths ? true : false;
 }
 

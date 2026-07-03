@@ -151,7 +151,6 @@ export interface RouteMeta {
   icon?: string;
   showLink?: boolean;
   showParent?: boolean;
-  auths?: string[];
   rank?: number;
   frameSrc?: string;
   isFrameSrcInternal?: boolean;

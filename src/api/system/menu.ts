@@ -51,7 +51,6 @@ export interface MenuRequest {
  * MetaDTO
  */
 export interface MetaDTO {
-  auths?: string[];
   dynamicLevel?: number;
   extraIcon?: ExtraIconDTO;
   frameLoading?: boolean;

@@ -28,8 +28,7 @@ const permissionRouter = {
       name: "PermissionButton",
       meta: {
         title: "按钮权限",
-        roles: ["admin", "common"],
-        auths: ["btn_add", "btn_edit", "btn_delete"]
+        roles: ["admin", "common"]
       }
     }
   ]
