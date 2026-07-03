@@ -348,16 +348,15 @@ function getHistoryMode(routerHistory: string): RouterHistory {
   }
 }
 
-/** 获取当前页面按钮级别的权限 */
+/** 获取当前登录用户按钮级别的权限 */
 function getAuths(): Array<string> {
-  const routeAuths = router.currentRoute.value.meta.auths as Array<string>;
-  return mergeAuths(getCurrentUserPermissions(), routeAuths);
+  return getCurrentUserPermissions();
 }
 
 /** 是否有按钮级别的权限 */
 function hasAuth(value: string | Array<string>): boolean {
   if (!value) return false;
-  /** 优先使用登录态中的按钮权限，兼容当前路由 meta.auths 中的自定义 code */
+  /** 统一使用登录态中的按钮权限 */
   const auths = getAuths();
   if (!auths.length) return false;
   if (auths.includes(ALL_PERMISSIONS)) return true;
@@ -380,10 +379,6 @@ function getCurrentUserPermissions(): Array<string> {
   }
 
   return [];
-}
-
-function mergeAuths(...authGroups: Array<Array<string> | undefined>) {
-  return Array.from(new Set(authGroups.flatMap(auths => auths ?? [])));
 }
 
 /** 获取所有菜单中的第一个菜单（顶级菜单）*/
