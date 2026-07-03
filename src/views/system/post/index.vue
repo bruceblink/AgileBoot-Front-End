@@ -128,6 +128,7 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
       <!-- 表格操作栏 -->
       <template #buttons>
         <el-button
+          v-auth="'system:post:add'"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog('add')"
@@ -135,6 +136,7 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
           新增岗位
         </el-button>
         <el-button
+          v-auth="'system:post:remove'"
           type="danger"
           :icon="useRenderIcon(Delete)"
           @click="handleBulkDelete(tableRef)"
@@ -142,11 +144,18 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
           批量删除
         </el-button>
         <el-button
+          v-auth="'system:post:export'"
           type="primary"
           @click="CommonUtils.exportExcel(columns, dataList, '岗位列表')"
           >单页导出</el-button
         >
-        <el-button type="primary" @click="exportAllExcel">全部导出</el-button>
+        <el-button
+          v-auth="'system:post:export'"
+          type="primary"
+          @click="exportAllExcel"
+        >
+          全部导出
+        </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -176,6 +185,7 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="['system:post:query', 'system:post:edit']"
               class="reset-margin"
               link
               type="primary"
@@ -191,6 +201,7 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
             >
               <template #reference>
                 <el-button
+                  v-auth="'system:post:remove'"
                   class="reset-margin"
                   link
                   type="danger"

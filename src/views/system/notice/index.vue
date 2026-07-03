@@ -106,6 +106,7 @@ const {
       <!-- 表格操作栏 -->
       <template #buttons>
         <el-button
+          v-auth="'system:notice:add'"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog()"
@@ -113,6 +114,7 @@ const {
           添加公告
         </el-button>
         <el-button
+          v-auth="'system:notice:remove'"
           type="danger"
           :icon="useRenderIcon(Delete)"
           @click="handleBulkDelete(tableRef)"
@@ -149,6 +151,7 @@ const {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="['system:notice:query', 'system:notice:edit']"
               class="reset-margin"
               link
               type="primary"
@@ -164,6 +167,7 @@ const {
             >
               <template #reference>
                 <el-button
+                  v-auth="'system:notice:remove'"
                   class="reset-margin"
                   link
                   type="danger"

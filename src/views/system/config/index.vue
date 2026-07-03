@@ -99,6 +99,7 @@ const {
       <!-- 表格操作栏 -->
       <template #buttons>
         <el-button
+          v-auth="'system:config:remove'"
           type="warning"
           :icon="useRenderIcon(AddFill)"
           @click="handleRefresh()"
@@ -130,6 +131,7 @@ const {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="['system:config:query', 'system:config:edit']"
               class="reset-margin"
               link
               type="primary"
