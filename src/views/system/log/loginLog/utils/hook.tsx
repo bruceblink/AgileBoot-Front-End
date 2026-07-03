@@ -16,7 +16,7 @@ import { useSystemDict } from "@/views/system/utils/dict";
 type TagType = "primary" | "success" | "warning" | "danger" | "info";
 
 type LoginLogRow = LoginLogsDTO & {
-  logId: number;
+  logId: string;
   status: number;
 };
 
@@ -57,7 +57,7 @@ export function useLoginLogHook() {
 
   const dataList = ref<LoginLogRow[]>([]);
   const pageLoading = ref(true);
-  const multipleSelection = ref<number[]>([]);
+  const multipleSelection = ref<Array<number | string>>([]);
   const currentSort = ref<Sort>({ ...defaultSort });
 
   const columns: TableColumnList = [

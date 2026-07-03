@@ -39,7 +39,7 @@ export interface DeptTreeDTO {
   id: number;
   parentId: number;
   label: string;
-  children: [DeptTreeDTO];
+  children?: DeptTreeDTO[];
 }
 
 /** 获取部门列表 */
@@ -51,7 +51,6 @@ export const getDeptListApi = (params?: DeptQuery) => {
 
 /** 新增部门 */
 export const addDeptApi = (data: DeptRequest) => {
-  console.log(data);
   return http.request<ResponseData<void>>("post", "/system/dept", {
     data
   });
@@ -76,7 +75,7 @@ export const deleteDeptApi = (deptId: string) => {
 
 /** 获取部门树级结构 */
 export const getDeptTree = () => {
-  return http.request<ResponseData<DeptTreeDTO>>(
+  return http.request<ResponseData<DeptTreeDTO[]>>(
     "get",
     "/system/depts/dropdown"
   );

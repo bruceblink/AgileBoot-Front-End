@@ -74,7 +74,7 @@ export interface LoginLogQuery extends BasePageQuery {
  */
 export interface LoginLogsDTO {
   browser?: string;
-  infoId?: string;
+  logId?: string;
   ipAddress?: string;
   loginLocation?: string;
   loginTime?: Date;
@@ -106,7 +106,7 @@ export const exportLoginLogExcelApi = (
   });
 };
 
-export const deleteLoginLogApi = (data: Array<number>) => {
+export const deleteLoginLogApi = (data: Array<number | string>) => {
   return http.request<ResponseData<void>>("delete", "/logs/loginLogs", {
     params: {
       // 需要将数组转换为字符串  否则Axios会将参数变成 noticeIds[0]:1  noticeIds[1]:2 这种格式，后端接收参数不成功
