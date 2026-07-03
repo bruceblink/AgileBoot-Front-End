@@ -25,6 +25,7 @@ import { usePermissionStoreHook } from "@/store/modules/permission";
 const IFrame = () => import("@/layout/frameView.vue");
 // https://cn.vitejs.dev/guide/features.html#glob-import
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
+const ALL_PERMISSIONS = "*:*:*";
 
 // 动态路由
 import { getAsyncRoutes, RouteItem } from "@/api/common/login";
@@ -349,19 +350,40 @@ function getHistoryMode(routerHistory: string): RouterHistory {
 
 /** 获取当前页面按钮级别的权限 */
 function getAuths(): Array<string> {
-  return router.currentRoute.value.meta.auths as Array<string>;
+  const routeAuths = router.currentRoute.value.meta.auths as Array<string>;
+  return mergeAuths(getCurrentUserPermissions(), routeAuths);
 }
 
 /** 是否有按钮级别的权限 */
 function hasAuth(value: string | Array<string>): boolean {
   if (!value) return false;
-  /** 从当前路由的`meta`字段里获取按钮级别的所有自定义`code`值 */
-  const metaAuths = getAuths();
-  if (!metaAuths) return false;
+  /** 优先使用登录态中的按钮权限，兼容当前路由 meta.auths 中的自定义 code */
+  const auths = getAuths();
+  if (!auths.length) return false;
+  if (auths.includes(ALL_PERMISSIONS)) return true;
   const isAuths = isString(value)
-    ? metaAuths.includes(value)
-    : isIncludeAllChildren(value, metaAuths);
+    ? auths.includes(value)
+    : isIncludeAllChildren(value, auths);
   return isAuths ? true : false;
+}
+
+function getCurrentUserPermissions(): Array<string> {
+  const permissions =
+    storageSession().getItem<TokenDTO>(sessionKey)?.currentUser?.permissions;
+
+  if (Array.isArray(permissions)) {
+    return permissions.filter(Boolean);
+  }
+
+  if (permissions instanceof Set) {
+    return Array.from(permissions).filter(Boolean);
+  }
+
+  return [];
+}
+
+function mergeAuths(...authGroups: Array<Array<string> | undefined>) {
+  return Array.from(new Set(authGroups.flatMap(auths => auths ?? [])));
 }
 
 /** 获取所有菜单中的第一个菜单（顶级菜单）*/
