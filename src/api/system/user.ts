@@ -24,6 +24,7 @@ export interface UserDTO {
   nickname?: string;
   phoneNumber?: string;
   postId?: number;
+  postName?: string;
   remark?: string;
   roleId?: number;
   roleName?: string;
@@ -65,6 +66,16 @@ export interface UserProfileRequest {
   phoneNumber?: string;
   sex?: number;
   userId?: number;
+}
+
+export interface UserProfileDTO {
+  postName?: string;
+  roleName?: string;
+  user?: UserDTO;
+}
+
+export interface UploadFileDTO {
+  imgUrl?: string;
 }
 
 /**
@@ -143,7 +154,7 @@ export const exportUserExcelApi = (params: UserQuery, fileName: string) => {
 
 /** 用户头像上传 */
 export const uploadUserAvatarApi = data => {
-  return http.request<ResponseData<void>>(
+  return http.request<ResponseData<UploadFileDTO>>(
     "post",
     "/system/user/profile/avatar",
     {
@@ -154,6 +165,14 @@ export const uploadUserAvatarApi = data => {
         "Content-Type": "multipart/form-data"
       }
     }
+  );
+};
+
+/** 获取当前用户资料 */
+export const getUserProfileApi = () => {
+  return http.request<ResponseData<UserProfileDTO>>(
+    "get",
+    "/system/user/profile"
   );
 };
 

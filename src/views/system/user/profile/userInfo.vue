@@ -1,10 +1,15 @@
 <script setup lang="ts">
 // import { updateUserProfile } from '@/api/system/userApi';
 // import * as userApi from "@/api/system/userApi";
-import { ref, reactive } from "vue";
-import { updateUserProfileApi, UserProfileRequest } from "@/api/system/user";
+import { ref, reactive, watch } from "vue";
+import {
+  updateUserProfileApi,
+  UserDTO,
+  UserProfileRequest
+} from "@/api/system/user";
 import { message } from "@/utils/message";
 import { FormInstance } from "element-plus";
+import type { PropType } from "vue";
 import { useSystemDict } from "@/views/system/utils/dict";
 
 defineOptions({
@@ -16,9 +21,13 @@ const sexOptions = useSystemDict("sysUser.sex").options;
 
 const props = defineProps({
   user: {
-    type: Object
+    type: Object as PropType<UserDTO>,
+    default: () => ({})
   }
 });
+const emit = defineEmits<{
+  (e: "success", user: UserDTO): void;
+}>();
 
 const userModel = reactive<UserProfileRequest>({
   nickName: props.user.nickname,
@@ -27,10 +36,16 @@ const userModel = reactive<UserProfileRequest>({
   sex: props.user.sex
 });
 
-console.log(userModel);
-console.log(props.user);
-
-// const { proxy } = getCurrentInstance();
+watch(
+  () => props.user,
+  user => {
+    userModel.nickName = user?.nickname;
+    userModel.phoneNumber = user?.phoneNumber;
+    userModel.email = user?.email;
+    userModel.sex = user?.sex;
+  },
+  { deep: true }
+);
 
 const rules = ref({
   nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
@@ -54,12 +69,18 @@ const rules = ref({
 
 /** 提交按钮 */
 function submit() {
-  console.log(userRef.value);
   userRef.value.validate(valid => {
     if (valid) {
       updateUserProfileApi(userModel).then(() => {
         message("修改成功", {
           type: "success"
+        });
+        emit("success", {
+          ...props.user,
+          nickname: userModel.nickName,
+          phoneNumber: userModel.phoneNumber,
+          email: userModel.email,
+          sex: userModel.sex
         });
       });
     }

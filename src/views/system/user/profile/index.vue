@@ -2,32 +2,56 @@
 import resetPwd from "./resetPwd.vue";
 import userInfo from "./userInfo.vue";
 import userAvatar from "./userAvatar.vue";
-// import userAvatar from "./userAvatar";
-// import { getUserProfile } from '@/api/system/user';
-// import * as userApi from "@/api/system/userApi";
 import { reactive, ref } from "vue";
 import dayjs from "dayjs";
 import { useUserStoreHook } from "@/store/modules/user";
+import { getUserProfileApi, UserDTO } from "@/api/system/user";
+import { message } from "@/utils/message";
 
 const activeTab = ref("userinfo");
-const state = reactive({
+const userStore = useUserStoreHook();
+const state = reactive<{
+  user: UserDTO;
+  roleName: string;
+  postName: string;
+}>({
   user: {},
-  roleName: {},
-  postName: {}
+  roleName: "",
+  postName: ""
 });
 
-/** 用户名 */
-const currentUserInfo = useUserStoreHook()?.currentUserInfo;
+function syncUser(user?: UserDTO, roleName?: string, postName?: string) {
+  state.user = {
+    ...userStore.currentUserInfo,
+    ...state.user,
+    ...user
+  };
+  state.roleName = roleName ?? state.user.roleName ?? "";
+  state.postName = postName ?? state.user.postName ?? "";
+  userStore.currentUserInfo = {
+    ...userStore.currentUserInfo,
+    ...state.user,
+    roleName: state.roleName,
+    postName: state.postName
+  };
+}
 
-state.user = currentUserInfo;
-console.log(currentUserInfo);
+async function getUser() {
+  try {
+    const { data } = await getUserProfileApi();
+    syncUser(data.user, data.roleName, data.postName);
+  } catch (e) {
+    syncUser(userStore.currentUserInfo as UserDTO);
+    message((e as Error)?.message || "加载个人信息失败", { type: "error" });
+  }
+}
 
-function getUser() {
-  // userApi.getUserProfile().then(response => {
-  //   state.user = response.user;
-  //   state.roleName = response.roleName;
-  //   state.postName = response.postName;
-  // });
+function handleProfileUpdated(user: UserDTO) {
+  syncUser(user);
+}
+
+function handleAvatarUpdated(avatar: string) {
+  syncUser({ avatar });
 }
 
 getUser();
@@ -44,32 +68,34 @@ getUser();
           </template>
           <div>
             <div class="text-center">
-              <userAvatar :user="state.user" />
+              <userAvatar :user="state.user" @success="handleAvatarUpdated" />
             </div>
 
             <el-row>
               <el-descriptions :column="1">
                 <el-descriptions-item label="用户名称">{{
-                  currentUserInfo.username
+                  state.user.username
                 }}</el-descriptions-item>
                 <el-descriptions-item label="手机号码">{{
-                  currentUserInfo.phoneNumber
+                  state.user.phoneNumber
                 }}</el-descriptions-item>
                 <el-descriptions-item label="用户邮箱">{{
-                  currentUserInfo.email
+                  state.user.email
                 }}</el-descriptions-item>
                 <el-descriptions-item label="部门 / 职位">
-                  {{ currentUserInfo.deptName }} /
-                  {{ currentUserInfo.postName }}
+                  {{ state.user.deptName }} /
+                  {{ state.postName }}
                 </el-descriptions-item>
                 <el-descriptions-item label="角色">
-                  {{ currentUserInfo.roleName }}
+                  {{ state.roleName }}
                 </el-descriptions-item>
                 <el-descriptions-item label="创建日期">
                   {{
-                    dayjs(currentUserInfo.createTime).format(
-                      "YYYY-MM-DD HH:mm:ss"
-                    )
+                    state.user.createTime
+                      ? dayjs(state.user.createTime).format(
+                          "YYYY-MM-DD HH:mm:ss"
+                        )
+                      : "-"
                   }}
                 </el-descriptions-item>
               </el-descriptions>
@@ -86,7 +112,7 @@ getUser();
           </template>
           <el-tabs v-model="activeTab">
             <el-tab-pane label="基本资料" name="userinfo">
-              <userInfo :user="state.user" />
+              <userInfo :user="state.user" @success="handleProfileUpdated" />
             </el-tab-pane>
             <el-tab-pane label="修改密码" name="resetPwd">
               <resetPwd :user="state.user" />

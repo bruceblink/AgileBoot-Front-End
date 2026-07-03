@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import ReCropper from "@/components/ReCropper";
 import { formatBytes } from "@pureadmin/utils";
-import { ref } from "vue";
-import { uploadUserAvatarApi } from "@/api/system/user";
-import { useUserStoreHook } from "@/store/modules/user";
-// import * as userApi from "@/api/system/userApi";
+import { ref, watch } from "vue";
+import { uploadUserAvatarApi, UserDTO } from "@/api/system/user";
 import { message } from "@/utils/message";
+import type { PropType } from "vue";
 
-const currentUser = useUserStoreHook().currentUserInfo;
+const props = defineProps({
+  user: {
+    type: Object as PropType<UserDTO>,
+    default: () => ({})
+  }
+});
+const emit = defineEmits<{
+  (e: "success", avatar: string): void;
+}>();
 
 const infos = ref();
 const imgBlob = ref();
@@ -15,10 +22,25 @@ const refCropper = ref();
 const showPopover = ref(false);
 const cropperImg = ref<string>("");
 
-cropperImg.value = import.meta.env.VITE_APP_BASE_API + currentUser.avatar;
+function getAvatarUrl(avatar?: string) {
+  if (!avatar) return "";
+  return avatar.startsWith("http")
+    ? avatar
+    : import.meta.env.VITE_APP_BASE_API + avatar;
+}
+
+cropperImg.value = getAvatarUrl(props.user.avatar);
+
+watch(
+  () => props.user.avatar,
+  avatar => {
+    if (avatar) {
+      cropperImg.value = getAvatarUrl(avatar);
+    }
+  }
+);
 
 function onCropper({ base64, blob, info }) {
-  console.log(blob);
   infos.value = info;
   imgBlob.value = blob;
   cropperImg.value = base64;
@@ -39,10 +61,18 @@ const visible = ref(false);
 
 /** 上传图片 */
 function uploadImg() {
+  if (!imgBlob.value) {
+    message("请先选择头像图片", { type: "warning" });
+    return;
+  }
   const formData = new FormData();
   formData.append("avatarfile", imgBlob.value);
-  uploadUserAvatarApi(formData).then(() => {
+  uploadUserAvatarApi(formData).then(({ data }) => {
     open.value = false;
+    if (data?.imgUrl) {
+      cropperImg.value = getAvatarUrl(data.imgUrl);
+      emit("success", data.imgUrl);
+    }
     message("上传图片成功", {
       type: "success"
     });

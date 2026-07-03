@@ -46,7 +46,6 @@ const rules = ref({
 
 /** 提交按钮 */
 function submit() {
-  console.log(user);
   pwdRef.value.validate(valid => {
     if (valid) {
       updateCurrentUserPasswordApi({

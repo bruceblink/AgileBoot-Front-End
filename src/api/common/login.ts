@@ -72,7 +72,7 @@ export interface CurrentUserInfoDTO {
   email?: string;
   loginDate?: Date;
   loginIp?: string;
-  nickName?: string;
+  nickname?: string;
   phoneNumber?: string;
   postId?: number;
   postName?: string;
