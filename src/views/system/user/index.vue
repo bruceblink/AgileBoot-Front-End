@@ -104,6 +104,7 @@ const {
     <PureTableBar title="用户管理" :columns="columns" @refresh="onSearch">
       <template #buttons>
         <el-button
+          v-auth="'system:user:add'"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog('新增')"
@@ -111,6 +112,7 @@ const {
           新增用户
         </el-button>
         <el-button
+          v-auth="'system:user:import'"
           type="info"
           :icon="useRenderIcon(Upload)"
           @click="openUploadDialog"
@@ -118,6 +120,7 @@ const {
           导入
         </el-button>
         <el-button
+          v-auth="'system:user:export'"
           type="warning"
           :icon="useRenderIcon(Download)"
           @click="exportAllExcel"
@@ -146,6 +149,7 @@ const {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="['system:user:query', 'system:user:edit']"
               class="reset-margin"
               link
               type="primary"
@@ -158,6 +162,7 @@ const {
             <el-popconfirm title="是否确认删除?" @confirm="handleDelete(row)">
               <template #reference>
                 <el-button
+                  v-auth="'system:user:remove'"
                   class="reset-margin"
                   link
                   type="primary"
@@ -168,7 +173,7 @@ const {
                 </el-button>
               </template>
             </el-popconfirm>
-            <el-dropdown>
+            <el-dropdown v-auth="'system:user:resetPwd'">
               <el-button
                 class="ml-3 mt-[2px]"
                 link
@@ -180,6 +185,7 @@ const {
                 <el-dropdown-menu>
                   <el-dropdown-item>
                     <el-button
+                      v-auth="'system:user:resetPwd'"
                       :class="buttonClass"
                       link
                       type="primary"

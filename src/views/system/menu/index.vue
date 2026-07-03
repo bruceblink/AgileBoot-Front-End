@@ -84,6 +84,7 @@ const {
     >
       <template #buttons>
         <el-button
+          v-auth="'system:menu:add'"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog()"
@@ -111,6 +112,7 @@ const {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="['system:menu:query', 'system:menu:edit']"
               class="reset-margin"
               link
               type="primary"
@@ -127,6 +129,7 @@ const {
             >
               <template #reference>
                 <el-button
+                  v-auth="'system:menu:remove'"
                   class="reset-margin"
                   link
                   type="danger"

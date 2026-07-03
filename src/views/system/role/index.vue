@@ -124,6 +124,7 @@ function handleFormSuccess() {
     <PureTableBar title="角色列表" :columns="columns" @refresh="onSearch">
       <template #buttons>
         <el-button
+          v-auth="'system:role:add'"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog('add')"
@@ -153,6 +154,7 @@ function handleFormSuccess() {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="['system:role:query', 'system:role:edit']"
               class="reset-margin"
               link
               type="primary"
@@ -168,6 +170,7 @@ function handleFormSuccess() {
             >
               <template #reference>
                 <el-button
+                  v-auth="'system:role:remove'"
                   class="reset-margin"
                   link
                   type="primary"
