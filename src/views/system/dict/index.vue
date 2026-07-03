@@ -121,6 +121,7 @@ const {
         >
           <template #buttons>
             <el-button
+              v-auth="'system:dict:add'"
               type="primary"
               :icon="useRenderIcon(AddFill)"
               @click="openTypeDialog()"
@@ -152,6 +153,7 @@ const {
             >
               <template #typeOperation="{ row }">
                 <el-button
+                  v-auth="['system:dict:query', 'system:dict:edit']"
                   class="reset-margin"
                   link
                   type="primary"
@@ -172,6 +174,7 @@ const {
                   数据
                 </el-button>
                 <el-button
+                  v-auth="'system:dict:remove'"
                   class="reset-margin"
                   link
                   type="danger"
@@ -250,6 +253,7 @@ const {
         >
           <template #buttons>
             <el-button
+              v-auth="'system:dict:add'"
               type="primary"
               :icon="useRenderIcon(AddFill)"
               @click="openDataDialog('新增')"
@@ -280,6 +284,7 @@ const {
             >
               <template #dataOperation="{ row }">
                 <el-button
+                  v-auth="['system:dict:query', 'system:dict:edit']"
                   class="reset-margin"
                   link
                   type="primary"
@@ -290,6 +295,7 @@ const {
                   修改
                 </el-button>
                 <el-button
+                  v-auth="'system:dict:remove'"
                   class="reset-margin"
                   link
                   type="danger"
@@ -334,6 +340,7 @@ const {
               刷新
             </el-button>
             <el-button
+              v-auth="'system:dict:add'"
               type="primary"
               :icon="useRenderIcon(AddFill)"
               @click="openDataDialog('新增', undefined, { lockDictType: true })"
@@ -362,6 +369,7 @@ const {
         >
           <template #dataOperation="{ row }">
             <el-button
+              v-auth="['system:dict:query', 'system:dict:edit']"
               class="reset-margin"
               link
               type="primary"
@@ -371,6 +379,7 @@ const {
               修改
             </el-button>
             <el-button
+              v-auth="'system:dict:remove'"
               class="reset-margin"
               link
               type="danger"

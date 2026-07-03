@@ -103,6 +103,7 @@ const {
             >
               <template #reference>
                 <el-button
+                  v-auth="'monitor:online:forceLogout'"
                   class="reset-margin"
                   link
                   type="danger"

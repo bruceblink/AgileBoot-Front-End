@@ -14,7 +14,7 @@ import { CommonUtils } from "../../../../utils/common";
 
 /** 组件name最好和菜单表中的router_name一致 */
 defineOptions({
-  name: "SystemOperationLog"
+  name: "OperationLog"
 });
 
 const businessTypeOptions = useSystemDict("sysOperationLog.businessType", {
@@ -140,6 +140,7 @@ const {
       <!-- 表格操作栏 -->
       <template #buttons>
         <el-button
+          v-auth="'monitor:operlog:remove'"
           type="danger"
           :icon="useRenderIcon(Delete)"
           @click="handleBulkDelete(tableRef)"
@@ -147,11 +148,15 @@ const {
           批量删除
         </el-button>
         <el-button
+          v-auth="'monitor:operlog:export'"
           type="primary"
           @click="CommonUtils.exportExcel(columns, dataList, '操作日志列表')"
           >单页导出</el-button
         >
-        <el-button type="primary" @click="() => exportAllExcel()"
+        <el-button
+          v-auth="'monitor:operlog:export'"
+          type="primary"
+          @click="() => exportAllExcel()"
           >全部导出</el-button
         >
       </template>
@@ -183,6 +188,7 @@ const {
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="'monitor:operlog:query'"
               class="reset-margin"
               link
               type="primary"
@@ -198,6 +204,7 @@ const {
             >
               <template #reference>
                 <el-button
+                  v-auth="'monitor:operlog:remove'"
                   class="reset-margin"
                   link
                   type="danger"

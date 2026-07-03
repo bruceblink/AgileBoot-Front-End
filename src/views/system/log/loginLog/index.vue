@@ -13,7 +13,7 @@ import { CommonUtils } from "@/utils/common";
 
 /** 组件name最好和菜单表中的router_name一致 */
 defineOptions({
-  name: "SystemOperationLog"
+  name: "LoginLog"
 });
 
 const loginLogStatusOptions = useSystemDict("sysLoginLog.status", {
@@ -121,6 +121,7 @@ const {
       <!-- 表格操作栏 -->
       <template #buttons>
         <el-button
+          v-auth="'monitor:logininfor:remove'"
           type="danger"
           :icon="useRenderIcon(Delete)"
           @click="handleBulkDelete(tableRef)"
@@ -128,11 +129,15 @@ const {
           批量删除
         </el-button>
         <el-button
+          v-auth="'monitor:logininfor:export'"
           type="primary"
           @click="CommonUtils.exportExcel(columns, dataList, '登录日志列表')"
           >单页导出</el-button
         >
-        <el-button type="primary" @click="() => exportAllExcel()"
+        <el-button
+          v-auth="'monitor:logininfor:export'"
+          type="primary"
+          @click="() => exportAllExcel()"
           >全部导出</el-button
         >
       </template>
@@ -169,6 +174,7 @@ const {
             >
               <template #reference>
                 <el-button
+                  v-auth="'monitor:logininfor:remove'"
                   class="reset-margin"
                   link
                   type="danger"

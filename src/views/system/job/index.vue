@@ -101,6 +101,7 @@ const {
     <PureTableBar title="定时任务" :columns="columns" @refresh="onSearch">
       <template #buttons>
         <el-button
+          v-auth="'system:job:add'"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog()"
@@ -108,6 +109,7 @@ const {
           添加任务
         </el-button>
         <el-button
+          v-auth="'system:job:remove'"
           type="danger"
           :icon="useRenderIcon(Delete)"
           @click="handleBulkDelete(tableRef)"
@@ -144,6 +146,7 @@ const {
           <template #jobId="{ row }">
             <el-tooltip content="查看运行日志" placement="top">
               <el-button
+                v-auth="'system:job:list'"
                 class="job-id-link"
                 link
                 type="primary"
@@ -157,6 +160,7 @@ const {
           <template #operation="{ row }">
             <div class="operation-buttons">
               <el-button
+                v-auth="'system:job:run'"
                 class="operation-button"
                 link
                 type="primary"
@@ -167,6 +171,7 @@ const {
                 执行
               </el-button>
               <el-button
+                v-auth="'system:job:changeStatus'"
                 class="operation-button"
                 link
                 :type="row.status === 1 ? 'warning' : 'success'"
@@ -176,6 +181,7 @@ const {
                 {{ row.status === 1 ? "暂停" : "恢复" }}
               </el-button>
               <el-button
+                v-auth="['system:job:query', 'system:job:edit']"
                 class="operation-button"
                 link
                 type="primary"
@@ -186,6 +192,7 @@ const {
                 修改
               </el-button>
               <el-button
+                v-auth="'system:job:remove'"
                 class="operation-button"
                 link
                 type="danger"
