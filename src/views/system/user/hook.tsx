@@ -26,6 +26,7 @@ import { DeptDTO, getDeptListApi } from "@/api/system/dept";
 import { PostPageResponse, getPostListApi } from "@/api/system/post";
 import { RoleDTO, getRoleListApi } from "@/api/system/role";
 import { useSystemDict } from "@/views/system/utils/dict";
+import { hasAuth } from "@/router/utils";
 
 type SwitchState = {
   loading?: boolean;
@@ -57,6 +58,19 @@ const userStatusMap = useSystemDict("common.status").map;
 
 function getUserStatusLabel(status: unknown, fallback = "") {
   return userStatusMap.value[String(status)]?.label || fallback;
+}
+
+function renderUserStatusTag(status: unknown, size: string) {
+  const statusInfo = userStatusMap.value[String(status)] ?? {
+    cssTag: "info",
+    label: String(status ?? "-")
+  };
+
+  return (
+    <el-tag size={size} type={statusInfo.cssTag} effect="plain">
+      {statusInfo.label}
+    </el-tag>
+  );
 }
 
 export function useHook() {
@@ -147,19 +161,22 @@ export function useHook() {
       label: "状态",
       prop: "status",
       minWidth: 90,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text={getUserStatusLabel(1, "1")}
-          inactive-text={getUserStatusLabel(0, "0")}
-          inline-prompt
-          onChange={() => onChange(scope.row as UserDTO, scope.index)}
-        />
-      )
+      cellRenderer: scope =>
+        hasAuth("system:user:edit") ? (
+          <el-switch
+            size={scope.props.size === "small" ? "small" : "default"}
+            loading={switchLoadMap.value[scope.index]?.loading}
+            v-model={scope.row.status}
+            active-value={1}
+            inactive-value={0}
+            active-text={getUserStatusLabel(1, "1")}
+            inactive-text={getUserStatusLabel(0, "0")}
+            inline-prompt
+            onChange={() => onChange(scope.row as UserDTO, scope.index)}
+          />
+        ) : (
+          renderUserStatusTag(scope.row.status, scope.props.size)
+        )
     },
     {
       label: "创建时间",
@@ -360,7 +377,6 @@ export function useHook() {
       closeOnClickModal: false,
       contentRenderer: () => h(uploadForm, { ref: uploadFormRef }),
       beforeSure: done => {
-        console.log("上传文件");
         uploadFormRef.value.getFormRef().submit();
         done();
         getList();
