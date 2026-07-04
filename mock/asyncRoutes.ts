@@ -36,11 +36,12 @@ const permissionRouter = {
 
 export default [
   {
-    url: "/getAsyncRoutes",
+    url: "/getRouters",
     method: "get",
     response: () => {
       return {
-        success: true,
+        code: 0,
+        msg: "success",
         data: [permissionRouter]
       };
     }

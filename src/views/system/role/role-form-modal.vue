@@ -59,6 +59,7 @@ const formData = reactive<UpdateRoleCommand>({
 });
 
 const statusOptions = useSystemDict("common.status").options;
+const ROLE_KEY_PATTERN = /^[a-zA-Z]([a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
 
 const rules: FormRules = {
   roleName: [
@@ -71,6 +72,17 @@ const rules: FormRules = {
     {
       required: true,
       message: "角色权限字符不能为空"
+    },
+    {
+      max: 100,
+      message: "角色权限字符长度不能超过100个字符",
+      trigger: "blur"
+    },
+    {
+      pattern: ROLE_KEY_PATTERN,
+      message:
+        "角色权限字符必须以字母开头，只能包含字母、数字和中划线，且中划线不能出现在首尾",
+      trigger: "blur"
     }
   ],
   roleSort: [
@@ -132,8 +144,12 @@ function collectMenuIdsWithAncestors(menuIds: number[]) {
 }
 
 function handleCheckChange() {
-  const checkedKeys = treeRef.value.getCheckedKeys(false) as number[];
-  formData.menuIds = collectMenuIdsWithAncestors(checkedKeys);
+  const checkedKeys = treeRef.value?.getCheckedKeys(false) as number[];
+  const halfCheckedKeys = treeRef.value?.getHalfCheckedKeys?.() as number[];
+  formData.menuIds = collectMenuIdsWithAncestors([
+    ...(checkedKeys ?? []),
+    ...(halfCheckedKeys ?? [])
+  ]);
 }
 
 function normalizeStatus(status: unknown) {
@@ -150,7 +166,7 @@ function buildRolePayload(): AddRoleCommand {
     dataScope: formData.dataScope,
     menuIds: formData.menuIds,
     remark: formData.remark,
-    roleKey: formData.roleKey,
+    roleKey: formData.roleKey.trim(),
     roleName: formData.roleName,
     roleSort: formData.roleSort,
     status: normalizeStatus(formData.status)
@@ -213,7 +229,10 @@ async function handleConfirm() {
         <el-input v-model="formData.roleName" />
       </el-form-item>
       <el-form-item prop="roleKey" label="权限字符" required>
-        <el-input v-model="formData.roleKey" placeholder="例如：admin" />
+        <el-input
+          v-model="formData.roleKey"
+          placeholder="例如：admin 或 ops-admin"
+        />
       </el-form-item>
       <el-form-item prop="roleSort" label="角色顺序" required>
         <el-input-number :min="1" v-model="formData.roleSort" />

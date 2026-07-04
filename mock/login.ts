@@ -8,26 +8,44 @@ export default [
     response: ({ body }) => {
       if (body.username === "admin") {
         return {
-          success: true,
+          code: 0,
+          msg: "success",
           data: {
-            username: "admin",
-            // 一个用户可能有多个角色
-            roles: ["admin"],
-            accessToken: "eyJhbGciOiJIUzUxMiJ9.admin",
+            token: "eyJhbGciOiJIUzUxMiJ9.admin",
             refreshToken: "eyJhbGciOiJIUzUxMiJ9.adminRefresh",
-            expires: "2023/10/30 00:00:00"
+            expiresIn: 7200,
+            refreshExpiresIn: 604800,
+            currentUser: {
+              roleKey: "admin",
+              permissions: ["*:*:*"],
+              userInfo: {
+                username: "admin",
+                nickname: "管理员"
+              }
+            }
           }
         };
       } else {
         return {
-          success: true,
+          code: 0,
+          msg: "success",
           data: {
-            username: "common",
-            // 一个用户可能有多个角色
-            roles: ["common"],
-            accessToken: "eyJhbGciOiJIUzUxMiJ9.common",
+            token: "eyJhbGciOiJIUzUxMiJ9.common",
             refreshToken: "eyJhbGciOiJIUzUxMiJ9.commonRefresh",
-            expires: "2023/10/30 00:00:00"
+            expiresIn: 7200,
+            refreshExpiresIn: 604800,
+            currentUser: {
+              roleKey: "common-user",
+              permissions: [
+                "system:user:list",
+                "system:user:query",
+                "system:role:list"
+              ],
+              userInfo: {
+                username: "common",
+                nickname: "普通用户"
+              }
+            }
           }
         };
       }
