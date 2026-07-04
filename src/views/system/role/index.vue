@@ -8,6 +8,7 @@ import Delete from "@iconify-icons/ep/delete";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
+import Download from "@iconify-icons/ep/download";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 import { getRoleInfoApi, RoleDTO } from "@/api/system/role";
 import RoleFormModal from "@/views/system/role/role-form-modal.vue";
@@ -30,6 +31,7 @@ const {
   pagination,
   onSearch,
   getList,
+  exportAllExcel,
   resetForm,
   menuTree,
   getMenuTree,
@@ -130,6 +132,14 @@ function handleFormSuccess() {
           @click="openDialog('add')"
         >
           新增角色
+        </el-button>
+        <el-button
+          v-auth="'system:role:export'"
+          type="success"
+          :icon="useRenderIcon(Download)"
+          @click="exportAllExcel"
+        >
+          导出角色
         </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">

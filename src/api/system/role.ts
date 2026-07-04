@@ -30,6 +30,13 @@ export function getRoleListApi(params: RoleQuery) {
   );
 }
 
+export function exportRoleExcelApi(params: RoleQuery, fileName: string) {
+  return http.download("/system/role/export", fileName, {
+    method: "post",
+    params
+  });
+}
+
 export function getRoleInfoApi(roleId: number) {
   return http.request<ResponseData<RoleDTO>>("get", "/system/role/" + roleId);
 }

@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { message } from "@/utils/message";
 import {
   deleteRoleApi,
+  exportRoleExcelApi,
   getRoleListApi,
   RoleDTO,
   RoleQuery,
@@ -193,6 +194,11 @@ export function useRole() {
     }
   }
 
+  async function exportAllExcel() {
+    CommonUtils.fillPaginationParams(form, pagination);
+    exportRoleExcelApi(toRaw(form), "角色列表.xlsx");
+  }
+
   const resetForm = (formEl?: FormInstance) => {
     if (!formEl) return;
     formEl.resetFields();
@@ -224,6 +230,7 @@ export function useRole() {
     pagination,
     onSearch,
     getList,
+    exportAllExcel,
     resetForm,
     menuTree,
     getMenuTree,
