@@ -50,13 +50,11 @@ export function transferToStandardRouterData(data: MenuRequest, menuTree: any) {
     data.routerName = `${pinyinStr}IframeRouter`;
   }
 
-  // 如果是外链跳转的话 需要自动设置他的path 按照外链跳转的规则 必须设置成/external
-  // 详见https://github.com/pure-admin/vue-pure-admin/issues/664
-  // 这里我们直接以菜单名转拼音的方式生成
+  // 外链地址按后端接口约定保存到 path，routerName 同步为外链地址供 pure-admin 识别。
   if (data.meta && data.menuType == 4) {
-    if (!isUrl(data.routerName)) {
-      data.routerName = `http://${data.routerName}`;
+    if (data.path && !isUrl(data.path)) {
+      data.path = `http://${data.path}`;
     }
-    data.path = `/external`;
+    data.routerName = data.path;
   }
 }

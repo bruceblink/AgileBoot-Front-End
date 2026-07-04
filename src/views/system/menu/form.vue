@@ -181,10 +181,9 @@ defineExpose({ getRef });
 
       <template v-else-if="newFormInline.menuType == 4">
         <re-col :value="24" :xs="24" :sm="24">
-          <el-form-item label="网站地址" prop="routerName">
-            <!-- 这里需要做拦截处理 -->
+          <el-form-item label="网站地址" prop="path">
             <el-input
-              v-model="newFormInline.routerName"
+              v-model="newFormInline.path"
               clearable
               placeholder="请输入外部网站地址，必须以https://或者http://开头"
             />
