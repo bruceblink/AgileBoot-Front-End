@@ -24,7 +24,7 @@ const upload = reactive({
 /** 下载模板操作 */
 function downloadTemplate() {
   http.download(
-    "system/users/excelTemplate",
+    "/system/users/excelTemplate",
     `user_template_${new Date().getTime()}.xls`
   );
 }
