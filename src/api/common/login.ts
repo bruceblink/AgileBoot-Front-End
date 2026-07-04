@@ -151,6 +151,8 @@ export interface RouteMeta {
   icon?: string;
   showLink?: boolean;
   showParent?: boolean;
+  /** 页面级角色权限字符，值来自角色 roleKey */
+  roles?: string[];
   rank?: number;
   frameSrc?: string;
   isFrameSrcInternal?: boolean;

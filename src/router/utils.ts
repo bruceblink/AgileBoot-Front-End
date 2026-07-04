@@ -13,13 +13,12 @@ import {
   cloneDeep,
   isAllEmpty,
   intersection,
-  storageSession,
-  isIncludeAllChildren
+  storageSession
 } from "@pureadmin/utils";
 import { getConfig } from "@/config";
 import { menuType } from "@/layout/types";
 import { buildHierarchyTree } from "@/utils/tree";
-import { sessionKey } from "@/utils/auth";
+import { getCurrentPermissions, getCurrentRoleKey } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 const IFrame = () => import("@/layout/frameView.vue");
@@ -29,7 +28,6 @@ const ALL_PERMISSIONS = "*:*:*";
 
 // 动态路由
 import { getAsyncRoutes, RouteItem } from "@/api/common/login";
-import { TokenDTO } from "@/api/common/login";
 
 function handRank(routeInfo: any) {
   const { name, path, parentId, meta } = routeInfo;
@@ -83,10 +81,9 @@ function isOneOfArray(a: Array<string>, b: Array<string>) {
     : true;
 }
 
-/** 从sessionStorage里取出当前登陆用户的角色roles，过滤无权限的菜单 */
+/** 从sessionStorage里取出当前登录用户的角色权限字符roleKey，过滤无权限的菜单 */
 function filterNoPermissionTree(data: RouteComponent[]) {
-  const roleKey =
-    storageSession().getItem<TokenDTO>(sessionKey).currentUser.roleKey;
+  const roleKey = getCurrentRoleKey();
   const currentRoles = roleKey ? [roleKey] : [];
   const newTree = cloneDeep(data).filter((v: any) =>
     isOneOfArray(v.meta?.roles, currentRoles)
@@ -356,24 +353,29 @@ function getAuths(): Array<string> {
 /** 是否有按钮级别的权限 */
 function hasAuth(value: string | Array<string>): boolean {
   if (!value) return false;
+  const requiredPermissions = normalizeAuthValue(value);
+  if (!requiredPermissions.length) return false;
   const permissions = getAuths();
   if (!permissions.length) return false;
   if (permissions.includes(ALL_PERMISSIONS)) return true;
-  const isAuths = isString(value)
-    ? permissions.includes(value)
-    : isIncludeAllChildren(value, permissions);
+  const isAuths = requiredPermissions.every(permission =>
+    permissions.includes(permission)
+  );
   return isAuths ? true : false;
 }
 
 function getCurrentUserPermissions(): Array<string> {
-  const permissions =
-    storageSession().getItem<TokenDTO>(sessionKey)?.currentUser?.permissions;
+  return getCurrentPermissions();
+}
 
-  if (Array.isArray(permissions)) {
-    return permissions.filter(Boolean);
-  }
+function normalizeAuthValue(value: string | Array<string>): Array<string> {
+  return (isString(value) ? [value] : value)
+    .map(permission => normalizePermission(permission))
+    .filter(Boolean);
+}
 
-  return [];
+function normalizePermission(permission: string): string {
+  return permission.trim();
 }
 
 /** 获取所有菜单中的第一个菜单（顶级菜单）*/

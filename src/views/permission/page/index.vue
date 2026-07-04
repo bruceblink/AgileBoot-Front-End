@@ -31,7 +31,7 @@ const options = [
 
 function onChange() {
   useUserStoreHook().SET_USERNAME(username.value || "");
-  useUserStoreHook().SET_ROLES([username.value || "common"]);
+  useUserStoreHook().SET_ROLE_KEYS([username.value || "common"]);
   storageSession().removeItem("async-routes");
   usePermissionStoreHook().clearAllCachePage();
   initRouter();

@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { storageSession } from "@pureadmin/utils";
 import { aesEncrypt, aesDecrypt } from "@/utils/crypt";
-import type { TokenDTO } from "@/api/common/login";
+import type { CurrentLoginUserDTO, TokenDTO } from "@/api/common/login";
 
 /**
  * 原版前端token实现
@@ -15,8 +15,8 @@ export interface DataInfo<T> {
   refreshToken: string;
   /** 用户名 */
   username?: string;
-  /** 当前登陆用户的角色 */
-  roles?: Array<string>;
+  /** 当前登录用户的角色权限字符 */
+  roleKey?: string;
 }
 
 export const sessionKey = "user-info";
@@ -37,6 +37,35 @@ export function getRefreshToken(): string {
   return getToken()?.refreshToken;
 }
 
+export function getCurrentUser(): CurrentLoginUserDTO | undefined {
+  return getToken()?.currentUser;
+}
+
+export function getCurrentRoleKey(): string {
+  return normalizeStringList([getCurrentUser()?.roleKey])[0] ?? "";
+}
+
+export function getCurrentRoleKeys(): string[] {
+  const roleKey = getCurrentRoleKey();
+  return roleKey ? [roleKey] : [];
+}
+
+export function getCurrentPermissions(): string[] {
+  return normalizeStringList(getCurrentUser()?.permissions);
+}
+
+function normalizeStringList(values?: unknown[]): string[] {
+  if (!Array.isArray(values)) return [];
+
+  return Array.from(
+    new Set(
+      values
+        .map(value => (typeof value === "string" ? value.trim() : ""))
+        .filter(Boolean)
+    )
+  );
+}
+
 /**
  * 后端处理token
  */
@@ -54,14 +83,12 @@ export function setTokenFromBackend(data: TokenDTO): void {
 
 /** 兼容旧版单点登录参数写入 */
 export function setToken(data: DataInfo<Date>): void {
-  const legacyToken: any = {
-    token: {
-      accessToken: data.accessToken,
-      refreshToken: data.refreshToken,
-      expires: data.expires
-    },
+  const legacyToken: TokenDTO = {
+    token: data.accessToken,
+    refreshToken: data.refreshToken,
     currentUser: {
-      roleKey: Array.isArray(data.roles) ? data.roles[0] ?? "" : "",
+      roleKey: data.roleKey ?? "",
+      permissions: [],
       userInfo: {
         username: data.username ?? ""
       }

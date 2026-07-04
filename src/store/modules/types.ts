@@ -40,7 +40,7 @@ export type DictionaryList = Record<string, DictionaryData[]>;
 
 export type userType = {
   username?: string;
-  roles?: Array<string>;
+  roleKeys?: Array<string>;
   verifyCode?: string;
   currentUserInfo?: Record<string, any>;
   /** 字典列表，用于下拉框直接展示 */

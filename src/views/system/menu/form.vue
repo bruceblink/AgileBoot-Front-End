@@ -76,7 +76,7 @@ defineExpose({ getRef });
         </el-form-item>
       </re-col>
       <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="类型">
+        <el-form-item label="类型" prop="isButton">
           <el-radio-group
             v-model="newFormInline.isButton"
             :disabled="newFormInline.id !== 0"
@@ -88,7 +88,7 @@ defineExpose({ getRef });
       </re-col>
       <template v-if="newFormInline.isButton === false">
         <re-col :value="24">
-          <el-form-item label="菜单类型">
+          <el-form-item label="菜单类型" prop="menuType">
             <el-radio-group
               v-model="newFormInline.menuType"
               :disabled="newFormInline.id !== 0"
@@ -208,7 +208,7 @@ defineExpose({ getRef });
         </el-form-item>
       </re-col>
       <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-switch
             v-model="newFormInline.status"
             inline-prompt

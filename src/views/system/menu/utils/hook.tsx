@@ -23,6 +23,8 @@ import { useSystemDict } from "@/views/system/utils/dict";
 const statusMap = useSystemDict("common.status").map;
 
 export function useHook() {
+  const DEFAULT_BUTTON_MENU_TYPE = 1;
+
   const searchFormParams = reactive({
     menuName: "",
     status: null
@@ -134,7 +136,7 @@ export function useHook() {
   async function onSearch() {
     loading.value = true;
     // 这里是返回一维数组结构，前端自行处理成树结构，返回格式要求：唯一id加父节点parentId，parentId取父节点id
-    const { data } = await getMenuListApi({ isButton: null }).finally(() => {
+    const { data } = await getMenuListApi().finally(() => {
       loading.value = false;
     });
     originalDataList.value = data;
@@ -225,6 +227,9 @@ export function useHook() {
 
         // 将菜单的数据转换为标准的路由数据
         transferToStandardRouterData(curData, optionTree);
+        if (curData.isButton) {
+          curData.menuType = DEFAULT_BUTTON_MENU_TYPE;
+        }
 
         FormRef.validate(valid => {
           if (valid) {

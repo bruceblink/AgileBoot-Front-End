@@ -82,8 +82,10 @@ const ruleForm = reactive({
 
 const finishLogin = (data: CommonAPI.TokenDTO) => {
   setTokenFromBackend(data);
-  useUserStoreHook().SET_USERNAME(data.currentUser.userInfo.username);
-  useUserStoreHook().SET_ROLES([data.currentUser.roleKey]);
+  useUserStoreHook().SET_USERNAME(data.currentUser?.userInfo?.username ?? "");
+  useUserStoreHook().SET_ROLE_KEYS(
+    data.currentUser?.roleKey ? [data.currentUser.roleKey] : []
+  );
   initRouter().then(() => {
     router.push(getTopMenu(true).path);
     message("登录成功", { type: "success" });

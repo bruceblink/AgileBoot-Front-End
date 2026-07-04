@@ -1,52 +1,53 @@
 import { defineStore } from "pinia";
 import { store } from "@/store";
 import { userType } from "./types";
-import { storageLocal, storageSession } from "@pureadmin/utils";
-import { sessionKey } from "@/utils/auth";
+import { storageLocal } from "@pureadmin/utils";
 import {
   DictionaryData,
-  TokenDTO,
   logout as logoutApi,
   logoutRefreshToken
 } from "@/api/common/login";
 import { clearLoginSession } from "@/utils/session";
-import { getRefreshToken } from "@/utils/auth";
+import {
+  getCurrentRoleKeys,
+  getCurrentUser,
+  getRefreshToken
+} from "@/utils/auth";
 
 const dictionaryListKey = "ag-dictionary-list";
 const dictionaryMapKey = "ag-dictionary-map";
 
 export const useUserStore = defineStore({
   id: "ag-user",
-  state: (): userType => ({
-    // 用户名
-    username:
-      storageSession().getItem<TokenDTO>(sessionKey)?.currentUser.userInfo
-        .username ?? "",
-    // 页面级别权限
-    roles: storageSession().getItem<TokenDTO>(sessionKey)?.currentUser.roleKey
-      ? [storageSession().getItem<TokenDTO>(sessionKey)?.currentUser.roleKey]
-      : [],
-    dictionaryList:
-      storageLocal().getItem<Record<string, DictionaryData[]>>(
-        dictionaryListKey
-      ) ?? {},
-    dictionaryMap:
-      storageLocal().getItem<Record<string, Record<string, DictionaryData>>>(
-        dictionaryMapKey
-      ) ?? {},
-    verifyCode: "",
-    currentUserInfo:
-      storageSession().getItem<TokenDTO>(sessionKey)?.currentUser.userInfo ?? {}
-  }),
+  state: (): userType => {
+    const currentUser = getCurrentUser();
+
+    return {
+      // 用户名
+      username: currentUser?.userInfo?.username ?? "",
+      // 页面级别角色权限字符
+      roleKeys: getCurrentRoleKeys(),
+      dictionaryList:
+        storageLocal().getItem<Record<string, DictionaryData[]>>(
+          dictionaryListKey
+        ) ?? {},
+      dictionaryMap:
+        storageLocal().getItem<Record<string, Record<string, DictionaryData>>>(
+          dictionaryMapKey
+        ) ?? {},
+      verifyCode: "",
+      currentUserInfo: currentUser?.userInfo ?? {}
+    };
+  },
   actions: {
     /** 存储用户名 */
     SET_USERNAME(username: string) {
       /** TODO 这里不是应该再进一步存到sessionStorage中吗 */
       this.username = username;
     },
-    /** 存储角色 */
-    SET_ROLES(roles: Array<string>) {
-      this.roles = roles;
+    /** 存储角色权限字符 */
+    SET_ROLE_KEYS(roleKeys: Array<string>) {
+      this.roleKeys = roleKeys;
     },
     /** 存储系统内的字典值 并拆分为Map形式和List形式 */
     SET_DICTIONARY(
@@ -106,7 +107,7 @@ export const useUserStore = defineStore({
     /** 清理登录态并返回登录页 */
     clearLoginState(options: { clearStorage?: boolean } = {}) {
       this.username = "";
-      this.roles = [];
+      this.roleKeys = [];
       clearLoginSession(options);
     }
   }
