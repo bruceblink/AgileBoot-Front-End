@@ -35,7 +35,7 @@ export default [
             expiresIn: 7200,
             refreshExpiresIn: 604800,
             currentUser: {
-              roleKey: "common-user",
+              roleKey: "common",
               permissions: [
                 "system:user:list",
                 "system:user:query",

@@ -25,7 +25,7 @@ const options = [
     permissions: ["*:*:*"]
   },
   {
-    roleKey: "common-user",
+    roleKey: "common",
     label: "普通角色",
     username: "common",
     permissions: ["system:user:list", "system:user:query", "system:role:list"]
