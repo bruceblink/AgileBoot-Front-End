@@ -212,7 +212,7 @@ export function useRole() {
     if (!force && menuTree.value?.length) {
       return menuTree.value;
     }
-    const { data } = await getMenuListApi();
+    const { data } = await getMenuListApi({ isButton: null });
     menuTree.value = toTree(data, "id", "parentId");
     return menuTree.value;
   }

@@ -28,6 +28,8 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 import { ElMessageBox } from "element-plus";
 import {
+  getCurrentRoleKeys,
+  getCurrentUser,
   getIsRememberMe,
   getPassword,
   getUsername,
@@ -82,10 +84,9 @@ const ruleForm = reactive({
 
 const finishLogin = (data: CommonAPI.TokenDTO) => {
   setTokenFromBackend(data);
-  useUserStoreHook().SET_USERNAME(data.currentUser?.userInfo?.username ?? "");
-  useUserStoreHook().SET_ROLE_KEYS(
-    data.currentUser?.roleKey ? [data.currentUser.roleKey] : []
-  );
+  const currentUser = getCurrentUser();
+  useUserStoreHook().SET_USERNAME(currentUser?.userInfo?.username ?? "");
+  useUserStoreHook().SET_ROLE_KEYS(getCurrentRoleKeys());
   initRouter().then(() => {
     router.push(getTopMenu(true).path);
     message("登录成功", { type: "success" });

@@ -229,15 +229,19 @@ export function toTree<T extends Tree>(
   keyField: keyof T,
   parentField: keyof T
 ): T[] {
-  const map = new Map<unknown, T>(src.map(it => [it[keyField], it]));
-  src.forEach(it => {
+  const nodes = src.map(it => ({
+    ...it,
+    children: undefined
+  }));
+  const map = new Map<unknown, T>(nodes.map(it => [it[keyField], it as T]));
+  nodes.forEach(it => {
     if (map.has(it[parentField])) {
       const parent = map.get(it[parentField])!;
       if (!parent.children) {
         parent.children = [];
       }
-      parent.children.push(it);
+      parent.children.push(it as T);
     }
   });
-  return src.filter(it => !it[parentField]);
+  return nodes.filter(it => !it[parentField]) as T[];
 }
