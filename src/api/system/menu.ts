@@ -85,7 +85,7 @@ export interface TransitionDTO {
 }
 
 /** 获取菜单列表 */
-export const getMenuListApi = (params: MenuQuery) => {
+export const getMenuListApi = (params?: MenuQuery) => {
   return http.request<ResponseData<Array<MenuDTO>>>("get", "/system/menus", {
     params
   });

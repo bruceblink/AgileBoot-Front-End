@@ -102,8 +102,38 @@ function handleOpened() {
 }
 
 const treeRef = ref<any>();
+function collectMenuIdsWithAncestors(menuIds: number[]) {
+  const selectedIds = new Set(menuIds);
+  const parentIdMap = new Map<number, number>();
+  const walk = (nodes: MenuDTO[]) => {
+    for (const node of nodes) {
+      if (typeof node.id === "number" && typeof node.parentId === "number") {
+        parentIdMap.set(node.id, node.parentId);
+      }
+      if (node.children?.length) {
+        walk(node.children);
+      }
+    }
+  };
+
+  walk(props.menuOptions);
+  for (const menuId of menuIds) {
+    let parentId = parentIdMap.get(menuId);
+    while (parentId && parentIdMap.has(parentId)) {
+      selectedIds.add(parentId);
+      parentId = parentIdMap.get(parentId);
+    }
+    if (parentId) {
+      selectedIds.add(parentId);
+    }
+  }
+
+  return Array.from(selectedIds);
+}
+
 function handleCheckChange() {
-  formData.menuIds = treeRef.value.getCheckedKeys(false) as number[];
+  const checkedKeys = treeRef.value.getCheckedKeys(false) as number[];
+  formData.menuIds = collectMenuIdsWithAncestors(checkedKeys);
 }
 
 function normalizeStatus(status: unknown) {
