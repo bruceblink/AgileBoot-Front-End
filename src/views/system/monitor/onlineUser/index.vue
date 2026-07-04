@@ -74,7 +74,7 @@ const {
     </el-form>
 
     <!-- table bar 包裹  table -->
-    <PureTableBar title="登录日志列表" :columns="columns" @refresh="onSearch">
+    <PureTableBar title="在线用户列表" :columns="columns" @refresh="onSearch">
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           border
