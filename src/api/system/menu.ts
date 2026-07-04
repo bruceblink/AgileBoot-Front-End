@@ -60,8 +60,6 @@ export interface MetaDTO {
   isFrameSrcInternal?: boolean;
   keepAlive?: boolean;
   rank?: number;
-  /** 后端路由元数据中的按钮权限快照，仅用于展示/调试，不作为前端鉴权来源 */
-  auths?: string[];
   roles?: string[];
   showLink?: boolean;
   showParent?: boolean;
