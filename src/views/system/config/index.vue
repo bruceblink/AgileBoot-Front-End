@@ -107,7 +107,7 @@ const {
           新增配置
         </el-button>
         <el-button
-          v-auth="'system:config:remove'"
+          v-auth="'system:config:refresh'"
           type="warning"
           :icon="useRenderIcon(AddFill)"
           @click="handleRefresh()"
