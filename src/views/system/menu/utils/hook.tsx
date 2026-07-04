@@ -16,11 +16,12 @@ import {
 import { usePublicHooks } from "../../hooks";
 import { addDialog } from "@/components/ReDialog";
 import { reactive, ref, onMounted, h, computed } from "vue";
-import { isAllEmpty } from "@pureadmin/utils";
+import { isAllEmpty, isUrl } from "@pureadmin/utils";
 import { IconifyIconOnline } from "@/components/ReIcon";
 import { useSystemDict } from "@/views/system/utils/dict";
 
 const statusMap = useSystemDict("common.status").map;
+const EXTERNAL_LINK_MENU_TYPE = 4;
 
 export function useHook() {
   const DEFAULT_BUTTON_MENU_TYPE = 1;
@@ -207,7 +208,7 @@ export function useHook() {
           parentId: row?.parentId ?? 0,
           menuName: row?.menuName ?? "",
           routerName: row?.routerName ?? "",
-          path: row?.path ?? "",
+          path: getMenuFormPath(row),
           isButton: row?.isButton,
           permission: row?.permission ?? "",
           menuType: row?.menuType ?? undefined,
@@ -244,6 +245,14 @@ export function useHook() {
         });
       }
     });
+  }
+
+  function getMenuFormPath(row?: MenuDTO) {
+    if (row?.menuType === EXTERNAL_LINK_MENU_TYPE && isUrl(row.routerName)) {
+      return row.routerName;
+    }
+
+    return row?.path ?? "";
   }
 
   async function handleDelete(row) {

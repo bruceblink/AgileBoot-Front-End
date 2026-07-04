@@ -12,6 +12,7 @@ import {
   isString,
   cloneDeep,
   isAllEmpty,
+  isUrl,
   intersection,
   storageSession
 } from "@pureadmin/utils";
@@ -25,6 +26,7 @@ const IFrame = () => import("@/layout/frameView.vue");
 // https://cn.vitejs.dev/guide/features.html#glob-import
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
 const ALL_PERMISSIONS = "*:*:*";
+const EXTERNAL_LINK_PREFIX = "/external/";
 
 // 动态路由
 import { getAsyncRoutes, RouteItem } from "@/api/common/login";
@@ -297,6 +299,7 @@ function normalizeBackendRoutes(backendRoutes: Array<RouteItem>) {
   backendRoutes.forEach(v => {
     // 标识此路由为后端返回路由
     v.meta.backstage = true;
+    normalizeExternalLinkRoute(v);
 
     // 父级的redirect属性取值：如果子级存在且父级的redirect属性不存在，默认取第一个子级的path；如果子级存在且父级的redirect属性存在，取存在的redirect属性，会覆盖默认值
     if (v?.children && v.children.length && !v.redirect)
@@ -320,6 +323,20 @@ function normalizeBackendRoutes(backendRoutes: Array<RouteItem>) {
   });
 
   return backendRoutes;
+}
+
+function normalizeExternalLinkRoute(route: RouteItem) {
+  const routeName = String(route.name ?? "");
+  const externalUrl = isUrl(route.path) ? route.path : routeName;
+
+  if (!isUrl(externalUrl)) {
+    return;
+  }
+
+  route.name = externalUrl;
+  route.path = route.path?.startsWith(EXTERNAL_LINK_PREFIX)
+    ? route.path
+    : `${EXTERNAL_LINK_PREFIX}${encodeURIComponent(externalUrl)}`;
 }
 
 /** 获取路由历史模式 https://next.router.vuejs.org/zh/guide/essentials/history-mode.html */
