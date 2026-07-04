@@ -70,7 +70,7 @@ const rules: FormRules = {
   roleKey: [
     {
       required: true,
-      message: "权限标识不能为空"
+      message: "角色权限字符不能为空"
     }
   ],
   roleSort: [
@@ -213,7 +213,7 @@ async function handleConfirm() {
         <el-input v-model="formData.roleName" />
       </el-form-item>
       <el-form-item prop="roleKey" label="权限字符" required>
-        <el-input v-model="formData.roleKey" />
+        <el-input v-model="formData.roleKey" placeholder="例如：admin" />
       </el-form-item>
       <el-form-item prop="roleSort" label="角色顺序" required>
         <el-input-number :min="1" v-model="formData.roleSort" />

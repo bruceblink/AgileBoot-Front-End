@@ -77,7 +77,7 @@ function handleFormSuccess() {
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="角色名称：" prop="name">
+      <el-form-item label="角色名称：" prop="roleName">
         <el-input
           v-model="form.roleName"
           placeholder="请输入角色名称"
@@ -85,10 +85,10 @@ function handleFormSuccess() {
           class="!w-[200px]"
         />
       </el-form-item>
-      <el-form-item label="角色标识：" prop="code">
+      <el-form-item label="权限字符：" prop="roleKey">
         <el-input
           v-model="form.roleKey"
-          placeholder="请输入角色标识"
+          placeholder="请输入角色权限字符"
           clearable
           class="!w-[180px]"
         />

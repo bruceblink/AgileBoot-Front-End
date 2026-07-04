@@ -71,7 +71,7 @@ export function useRole() {
       minWidth: 120
     },
     {
-      label: "角色标识",
+      label: "权限字符",
       prop: "roleKey",
       minWidth: 150
     },
