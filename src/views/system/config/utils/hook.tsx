@@ -5,12 +5,14 @@ import { type PaginationProps } from "@pureadmin/table";
 import { type FormInstance } from "element-plus";
 
 import {
+  addConfigApi,
   getConfigListApi,
   getConfigInfoApi,
   updateConfigApi,
   refreshConfigCacheApi,
   ConfigQuery,
   ConfigDTO,
+  ConfigFormModel,
   UpdateConfigRequest
 } from "@/api/system/config";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
@@ -24,10 +26,13 @@ type TableRef = {
 
 type DoneFn = Function;
 
-type ConfigFormData = ConfigDTO & {
+type ConfigFormData = ConfigFormModel & {
   configId: string;
+  configKey: string;
   configName: string;
+  configOptionsText?: string;
   configValue: string;
+  isAllowChange: number;
 };
 
 type EditFormRef = {
@@ -142,6 +147,30 @@ export function useHook() {
     });
   }
 
+  function parseConfigOptions(optionsText?: string) {
+    return (optionsText ?? "")
+      .split(",")
+      .map(item => item.trim())
+      .filter(Boolean);
+  }
+
+  async function handleAdd(curData: ConfigFormData, done: DoneFn) {
+    await addConfigApi({
+      configKey: curData.configKey,
+      configName: curData.configName,
+      configOptions: parseConfigOptions(curData.configOptionsText),
+      configValue: curData.configValue,
+      isAllowChange: curData.isAllowChange,
+      remark: curData.remark
+    }).then(() => {
+      message(`您成功新增了配置：${curData.configName}`, {
+        type: "success"
+      });
+      done();
+      getList();
+    });
+  }
+
   async function handleUpdate(curData: ConfigFormData, done: DoneFn) {
     const request: UpdateConfigRequest = {
       configValue: curData.configValue
@@ -159,11 +188,24 @@ export function useHook() {
   }
 
   async function openDialog(row?: ConfigDTO) {
-    const { data } = await getConfigInfoApi(row.configId);
+    const configId = row?.configId;
+    const isEdit = Boolean(configId);
+    const data = isEdit
+      ? (await getConfigInfoApi(configId)).data
+      : {
+          configName: "",
+          configKey: "",
+          configOptions: [],
+          configOptionsText: "",
+          configValue: "",
+          isAllowChange: 1,
+          remark: ""
+        };
     addDialog({
-      title: `修改配置`,
+      title: isEdit ? "修改配置" : "新增配置",
       props: {
-        formInline: data
+        formInline: data,
+        isEdit
       },
       width: "40%",
       draggable: true,
@@ -177,7 +219,11 @@ export function useHook() {
 
         formRuleRef.validate(valid => {
           if (valid) {
-            handleUpdate(curData, done);
+            if (isEdit) {
+              handleUpdate(curData, done);
+            } else {
+              handleAdd(curData, done);
+            }
           }
         });
       }

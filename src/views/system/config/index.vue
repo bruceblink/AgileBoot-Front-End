@@ -15,8 +15,8 @@ defineOptions({
   name: "SystemConfig"
 });
 
-const yesOrNoOptions = useSystemDict("common.yesOrNo", {
-  valueType: "string"
+const yesOrNoSearchOptions = useSystemDict("common.yesOrNo", {
+  valueType: "boolean"
 }).options;
 const tableRef = ref();
 
@@ -69,8 +69,8 @@ const {
           class="!w-[180px]"
         >
           <el-option
-            v-for="dict in yesOrNoOptions"
-            :key="dict.value"
+            v-for="dict in yesOrNoSearchOptions"
+            :key="String(dict.value)"
             :label="dict.label"
             :value="dict.value"
           />
@@ -95,9 +95,17 @@ const {
     </el-form>
 
     <!-- table bar 包裹  table -->
-    <PureTableBar title="通知列表" :columns="columns" @refresh="onSearch">
+    <PureTableBar title="参数配置列表" :columns="columns" @refresh="onSearch">
       <!-- 表格操作栏 -->
       <template #buttons>
+        <el-button
+          v-auth="'system:config:add'"
+          type="primary"
+          :icon="useRenderIcon(AddFill)"
+          @click="openDialog()"
+        >
+          新增配置
+        </el-button>
         <el-button
           v-auth="'system:config:remove'"
           type="warning"

@@ -3,5 +3,12 @@ import type { FormRules } from "element-plus";
 
 /** 自定义表单规则校验 */
 export const formRules = reactive(<FormRules>{
-  configValue: [{ required: true, message: "参数值为必填项", trigger: "blur" }]
+  configName: [
+    { required: true, message: "参数名称为必填项", trigger: "blur" }
+  ],
+  configKey: [{ required: true, message: "参数键名为必填项", trigger: "blur" }],
+  configValue: [{ required: true, message: "参数值为必填项", trigger: "blur" }],
+  isAllowChange: [
+    { required: true, message: "请选择是否允许修改", trigger: "change" }
+  ]
 });

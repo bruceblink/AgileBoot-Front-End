@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { formRules } from "./utils/rule";
-import { ConfigDTO } from "@/api/system/config";
+import { ConfigFormModel } from "@/api/system/config";
 import { useSystemDict } from "@/views/system/utils/dict";
 
 interface FormProps<T> {
+  isEdit?: boolean;
   formInline: T;
 }
 
 /** TODO 有其他方式  来换掉这个props 父子组件传值吗？ */
-const props = withDefaults(defineProps<FormProps<ConfigDTO>>(), {
+const props = withDefaults(defineProps<FormProps<ConfigFormModel>>(), {
+  isEdit: true,
   formInline: () => ({})
 });
 
 const formData = ref(props.formInline);
-const yesOrNoOptions = useSystemDict("common.yesOrNo", {
-  valueType: "string"
-}).options;
+const yesOrNoOptions = useSystemDict("common.yesOrNo").options;
 
 // TODO 这段有优化的空间吗？
 const formRuleRef = ref();
@@ -40,7 +40,7 @@ defineExpose({ getFormRuleRef });
         v-model="formData.configName"
         clearable
         placeholder="请输入参数名称"
-        :disabled="true"
+        :disabled="props.isEdit"
       />
     </el-form-item>
     <el-form-item label="参数键名" prop="configKey">
@@ -48,7 +48,15 @@ defineExpose({ getFormRuleRef });
         v-model="formData.configKey"
         clearable
         placeholder="请输入参数键名"
-        :disabled="true"
+        :disabled="props.isEdit"
+      />
+    </el-form-item>
+
+    <el-form-item v-if="!props.isEdit" label="可选值" prop="configOptionsText">
+      <el-input
+        v-model="formData.configOptionsText"
+        clearable
+        placeholder="多个可选值用英文逗号分隔"
       />
     </el-form-item>
 
@@ -79,7 +87,7 @@ defineExpose({ getFormRuleRef });
         placeholder="请选择"
         clearable
         class="!w-[180px]"
-        :disabled="true"
+        :disabled="props.isEdit"
       >
         <el-option
           v-for="dict in yesOrNoOptions"
@@ -94,7 +102,7 @@ defineExpose({ getFormRuleRef });
         v-model="formData.remark"
         type="textarea"
         placeholder="请输入内容"
-        :disabled="true"
+        :disabled="props.isEdit"
       />
     </el-form-item>
   </el-form>

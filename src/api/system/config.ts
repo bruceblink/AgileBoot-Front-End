@@ -12,7 +12,7 @@ export interface ConfigQuery extends BasePageQuery {
   /**
    * 是否允许更改配置
    */
-  isAllowChange?: string;
+  isAllowChange?: boolean;
 }
 
 /**
@@ -25,8 +25,21 @@ export interface ConfigDTO {
   configOptions?: string[];
   configValue?: string;
   createTime?: Date;
-  isAllowChange?: string;
+  isAllowChange?: number;
   isAllowChangeStr?: string;
+  remark?: string;
+}
+
+export type ConfigFormModel = ConfigDTO & {
+  configOptionsText?: string;
+};
+
+export interface AddConfigRequest {
+  configKey: string;
+  configName: string;
+  configOptions?: string[];
+  configValue: string;
+  isAllowChange: number;
   remark?: string;
 }
 
@@ -48,6 +61,11 @@ export const getConfigListApi = (params?: ConfigQuery) => {
   );
 };
 
+/** 新增配置 */
+export const addConfigApi = (data: AddConfigRequest) => {
+  return http.request<ResponseData<void>>("post", "/system/config", { data });
+};
+
 /** 获取配置信息 */
 export const getConfigInfoApi = (configId: string) => {
   return http.request<ResponseData<ConfigDTO>>(
@@ -56,18 +74,14 @@ export const getConfigInfoApi = (configId: string) => {
   );
 };
 
-/** 刷新配置缓存 */
+/** 修改配置 */
 export const updateConfigApi = (
   configId: number,
   data: UpdateConfigRequest
 ) => {
-  return http.request<ResponseData<PageDTO<ConfigDTO>>>(
-    "put",
-    `/system/config/${configId}`,
-    {
-      data
-    }
-  );
+  return http.request<ResponseData<void>>("put", `/system/config/${configId}`, {
+    data
+  });
 };
 
 /** 刷新配置缓存 */
