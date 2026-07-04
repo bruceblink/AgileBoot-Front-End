@@ -4,6 +4,7 @@ import { storageSession } from "@pureadmin/utils";
 import { type CSSProperties, ref, computed } from "vue";
 import { useUserStoreHook } from "@/store/modules/user";
 import { usePermissionStoreHook } from "@/store/modules/permission";
+import { getToken, setTokenFromBackend } from "@/utils/auth";
 
 defineOptions({
   name: "PermissionPage"
@@ -16,22 +17,45 @@ const elStyle = computed((): CSSProperties => {
   };
 });
 
-const username = ref(useUserStoreHook()?.username);
-
 const options = [
   {
-    value: "admin",
-    label: "管理员角色"
+    roleKey: "admin",
+    label: "管理员角色",
+    username: "admin",
+    permissions: ["*:*:*"]
   },
   {
-    value: "common",
-    label: "普通角色"
+    roleKey: "common-user",
+    label: "普通角色",
+    username: "common",
+    permissions: ["system:user:list", "system:user:query", "system:role:list"]
   }
 ];
 
+const roleKey = ref(getToken()?.currentUser?.roleKey ?? options[0].roleKey);
+
 function onChange() {
-  useUserStoreHook().SET_USERNAME(username.value || "");
-  useUserStoreHook().SET_ROLE_KEYS([username.value || "common"]);
+  const currentToken = getToken();
+  const selectedRole =
+    options.find(item => item.roleKey === roleKey.value) ?? options[0];
+
+  if (currentToken?.token) {
+    setTokenFromBackend({
+      ...currentToken,
+      currentUser: {
+        ...currentToken.currentUser,
+        roleKey: selectedRole.roleKey,
+        permissions: selectedRole.permissions,
+        userInfo: {
+          ...currentToken.currentUser?.userInfo,
+          username: selectedRole.username
+        }
+      }
+    });
+  }
+
+  useUserStoreHook().SET_USERNAME(selectedRole.username);
+  useUserStoreHook().SET_ROLE_KEYS([selectedRole.roleKey]);
   storageSession().removeItem("async-routes");
   usePermissionStoreHook().clearAllCachePage();
   initRouter();
@@ -46,15 +70,15 @@ function onChange() {
     <el-card shadow="never" :style="elStyle">
       <template #header>
         <div class="card-header">
-          <span>当前角色：{{ username }}</span>
+          <span>当前角色权限字符：{{ roleKey }}</span>
         </div>
       </template>
-      <el-select v-model="username" @change="onChange">
+      <el-select v-model="roleKey" @change="onChange">
         <el-option
           v-for="item in options"
-          :key="item.value"
+          :key="item.roleKey"
           :label="item.label"
-          :value="item.value"
+          :value="item.roleKey"
         />
       </el-select>
     </el-card>

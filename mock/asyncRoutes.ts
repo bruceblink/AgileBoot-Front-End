@@ -2,9 +2,9 @@
 import { MockMethod } from "vite-plugin-mock";
 
 /**
- * roles：页面级别权限，这里模拟二种 "admin"、"common"
+ * roles：页面级别角色权限字符，对应登录态 currentUser.roleKey
  * admin：管理员角色
- * common：普通角色
+ * common-user：普通角色
  */
 
 const permissionRouter = {
@@ -20,7 +20,7 @@ const permissionRouter = {
       name: "PermissionPage",
       meta: {
         title: "页面权限",
-        roles: ["admin", "common"]
+        roles: ["admin", "common-user"]
       }
     },
     {
@@ -28,7 +28,7 @@ const permissionRouter = {
       name: "PermissionButton",
       meta: {
         title: "按钮权限",
-        roles: ["admin", "common"]
+        roles: ["admin", "common-user"]
       }
     }
   ]
