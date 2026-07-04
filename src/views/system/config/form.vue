@@ -55,7 +55,7 @@ defineExpose({ getFormRuleRef });
     <el-form-item label="参数值" prop="configValue">
       <el-select
         v-model="formData.configValue"
-        v-if="formData.configOptions.length > 0"
+        v-if="formData.configOptions?.length"
         placeholder="请选择类型"
         clearable
         class="!w-[180px]"
