@@ -188,7 +188,7 @@ const {
         >
           <template #operation="{ row }">
             <el-button
-              v-auth="'monitor:operlog:query'"
+              v-auth="'monitor:operlog:list'"
               class="reset-margin"
               link
               type="primary"
