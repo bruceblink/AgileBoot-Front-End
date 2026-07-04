@@ -266,5 +266,8 @@ export interface CommandStatusDTO {
 
 /** 获取Redis信息 */
 export const getCacheInfoApi = () => {
-  return http.request<ResponseData<ServerInfo>>("get", "/monitor/cacheInfo");
+  return http.request<ResponseData<RedisCacheInfoDTO>>(
+    "get",
+    "/monitor/cacheInfo"
+  );
 };

@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCacheInfoApi, RedisCacheInfoDTO } from "@/api/system/monitor";
+import { getCacheInfoApi } from "@/api/system/monitor";
 import { onBeforeMount, ref } from "vue";
 import * as echarts from "echarts";
 /** 组件name最好和菜单表中的router_name一致 */
@@ -56,7 +56,7 @@ async function getList() {
   const { data } = await getCacheInfoApi().finally(() => {
     loading.value = false;
   });
-  const cacheInfo = data as RedisCacheInfoDTO;
+  const cacheInfo = data;
 
   cacheInfoTable.value = [
     {
