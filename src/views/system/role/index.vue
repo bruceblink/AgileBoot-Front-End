@@ -44,7 +44,7 @@ const opRow = ref<RoleDTO>();
 async function openDialog(type: "add" | "update", row?: RoleDTO) {
   let dialogRow = row;
   try {
-    await getMenuTree();
+    await getMenuTree(true);
     if (row) {
       const { data } = await getRoleInfoApi(row.roleId);
       dialogRow = {
@@ -126,7 +126,7 @@ function handleFormSuccess() {
     <PureTableBar title="角色列表" :columns="columns" @refresh="onSearch">
       <template #buttons>
         <el-button
-          v-auth="'system:role:add'"
+          v-auth="['system:role:add', 'system:menu:list']"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog('add')"
@@ -164,7 +164,11 @@ function handleFormSuccess() {
         >
           <template #operation="{ row }">
             <el-button
-              v-auth="['system:role:query', 'system:role:edit']"
+              v-auth="[
+                'system:role:query',
+                'system:role:edit',
+                'system:menu:list'
+              ]"
               class="reset-margin"
               link
               type="primary"

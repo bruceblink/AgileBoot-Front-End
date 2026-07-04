@@ -208,8 +208,8 @@ export function useRole() {
   const menuTree = ref<MenuDTO[]>([]);
 
   /** 菜单权限 */
-  async function getMenuTree() {
-    if (menuTree.value?.length) {
+  async function getMenuTree(force = false) {
+    if (!force && menuTree.value?.length) {
       return menuTree.value;
     }
     const { data } = await getMenuListApi();
